@@ -83,13 +83,15 @@ Manager.LoadConveyorBelts = function(Speed: number)
 end
 
 Manager.LoadCollectors = function()
-	for _, Collector: BasePart in Tycoon.Assets:WaitForChild("Collectors"):GetChildren() do
-		Collector.Touched:Connect(function(BasePart: BasePart)
-			if CollectionService:HasTag(BasePart, "Drop") then
-				CollectedEvent:FireServer(1)
-				BasePart:Destroy()
-			end
-		end)
+	local Inspect = function(BasePart: BasePart)
+		if CollectionService:HasTag(BasePart, "Drop") then
+			CollectedEvent:FireServer(1)
+			BasePart:Destroy()
+		end
+	end
+	
+	for _, Collector: BasePart in Tycoon.Assets:WaitForChild("Collectors"):GetChildren() do -- Initial/First Load
+		Collector.Touched:Connect(Inspect)
 	end
 end
 
